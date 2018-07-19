@@ -80,13 +80,15 @@ $('#list').on('click', '.complete-button', function(event) {
 	var itemId = item.attr('data-id');
 	
 	
-	// PUT request, update request
+	// PUT request, UPDATE request
 	var updateRequest = $.ajax({
   		type: 'PUT',
   		url: "https://listalous.herokuapp.com/lists/fluxka_2/items/" + itemId,
-  		data: { completed: !isItemCompleted }
+  		data: { completed: !isItemCompleted }  // Parameters you want to update
 	})
 
+// Finally, we'll update the item that has been marked as incomplete or complete.
+// Instead of creating a new item, we'll simple add or remove the class 'completed' from the specified item.
 // Add or remove the class 'completed' from the specified item.
 // This will cause the browser to render the item differently, based on the rules written in styles.css
 	updateRequest.done(function(itemDataFromServer) {
