@@ -37,19 +37,23 @@ var loadRequest = $.ajax({
 
 
 // Add all the Items from Server to the List
+// We need to update the page whenever the request succeeds
 loadRequest.done(function(dataFromServer) {
+  
   // items = Items´ array (with id, description, completed, created_at, updated_at, list_name)
   var itemsData = dataFromServer.items;
 
   itemsData.forEach(function(itemData) {
     addItemToPage(itemData);
   })
+
 })
+
 
 
 // Ask the server to save an item into the database
 $('#add-form').on('submit', function(event) {
-  event.preventDefault(); // Prevent the page for refreshing.
+  event.preventDefault(); // Prevent the page for refreshing, which is the normarl behaviour for a form
   var itemDescription = event.target.itemDescription.value;
 
   // Make a request to the server using AJAX
@@ -60,7 +64,8 @@ $('#add-form').on('submit', function(event) {
 
   })
 
-// Add the new item to the list
+// When the request succeeds, parse the data the server sends back.
+// And add the new item to the list
 creationRequest.done(function(itemDataFromServer) {
   addItemToPage(itemDataFromServer);
 })
