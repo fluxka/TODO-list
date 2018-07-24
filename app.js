@@ -1,3 +1,6 @@
+document.addEventListener ("DOMContentLoaded", 
+	function(event) {
+
 var itemTemplate = $('#templates .item'); // $() is an easy way to fetch an item from the page
 var list = $('#list');
 
@@ -123,6 +126,7 @@ $('#list').on('click', '.delete-button', function(event) {
 
 })
 
-
+}
+);
 
 
