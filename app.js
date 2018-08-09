@@ -13,7 +13,7 @@ var addItemToPage = function(itemData) {
 	var item = itemTemplate.clone(); 
 
 	// .attr() allows you to get and alter attributes stored in your HTML.
-	//In this case, we used it to store the id of an item in a data-id attribute, that is not used for styling, just for data storage.
+	// In this case, we used it to store the id of an item in a data-id attribute, that is not used for styling, just for data storage.
 	item.attr('data-id', itemData.id); 
 	//.find() helps you find elements nested inside other elements.
 	//.text() allows you to get and alter the text of an element.
@@ -38,13 +38,20 @@ var loadRequest = $.ajax({
   url: "https://listalous.herokuapp.com/lists/fluxka_2/"
 });
 
+console.log("GET request:");
+console.log(loadRequest);
+
 
 // Add all the Items from Server to the List
 // We need to update the page whenever the request succeeds
 loadRequest.done(function(dataFromServer) {
   
+console.log("dataFromServer in a loadRequest:");
+console.log(dataFromServer);
+
   // items = Items´ array (with id, description, completed, created_at, updated_at, list_name)
-  var itemsData = dataFromServer.items;
+  var itemsData = dataFromServer.items;  // dataFromServer = responseText: "{"name": "fluxka_2", "items": [{"id":12889, "description":....}]
+
 
   itemsData.forEach(function(itemData) {
     addItemToPage(itemData);
@@ -54,13 +61,16 @@ loadRequest.done(function(dataFromServer) {
 
 
 
+
+
 // Ask the server to save an item into the database
 $('#add-form').on('submit', function(event) {
-  event.preventDefault(); // Prevent the page for refreshing, which is the normarl behaviour for a form
-  var itemDescription = event.target.itemDescription.value;
+  
+  event.preventDefault(); // Prevent the page for refreshing, which is the normal behaviour for a form
+  
+  var itemDescription = event.target.itemDescription.value;  // Get the name="itemDescription"
 
-  // Make a request to the server using AJAX
-  var creationRequest = $.ajax({ 
+  var creationRequest = $.ajax({ // Make a request to the server using AJAX
   type: 'POST',
   url: "http://listalous.herokuapp.com/lists/fluxka_2/items",
   data: { description: itemDescription, completed: false }
@@ -70,6 +80,8 @@ $('#add-form').on('submit', function(event) {
 // When the request succeeds, parse the data the server sends back.
 // And add the new item to the list
 creationRequest.done(function(itemDataFromServer) {
+  console.log("itemDataFromServer in creationRequest:")
+  console.log(itemDataFromServer)
   addItemToPage(itemDataFromServer);
 })
 
@@ -95,6 +107,10 @@ $('#list').on('click', '.complete-button', function(event) {
 // Add or remove the class 'completed' from the specified item.
 // This will cause the browser to render the item differently, based on the rules written in styles.css
 	updateRequest.done(function(itemDataFromServer) {
+
+console.log("itemDataFromServer in an update request (PUT):");
+console.log(itemDataFromServer);
+
   		if (itemDataFromServer.completed) {
     		item.addClass('completed')
   		} else {
@@ -116,13 +132,22 @@ $('#list').on('click', '.delete-button', function(event) {
   		type: 'DELETE',
   		url: "https://listalous.herokuapp.com/lists/fluxka_2/items/" + itemId
 	})
+	
+	
+
+	console.log("deleteRequest:");
+	console.log(deleteRequest);
 
 	
-	// First Option: jQuery delete element by data attribute
-	$("ul li[data-id=" + itemId + "]").remove();
+
+
+	// First Option: jQuery delete element by itemId
+	deleteRequest.done($('[data-id=' + itemId + ']').remove());
+	
+	
 
 	// Second Option: add Class 'deleted' --> by css: display = none
-	/* deleteRequest.done(item.addClass('deleted')); */
+	 //deleteRequest.done(item.addClass('deleted')); 
 
 })
 

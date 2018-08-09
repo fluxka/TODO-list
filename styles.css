@@ -20,8 +20,8 @@ h1 {
 }
 
 #app {
-  box-shadow: 0 0 5px #684F91;
-  font-size: 35px;
+  box-shadow: 0 0 5px #000;
+  font-size: 21px;
   color: #080D3B;
   background-color: white;
 }
@@ -46,7 +46,7 @@ form {
 
 #create::-webkit-input-placeholder {
   color: #C3C3C4;
-  text-align: center;
+  text-align: left;
 }
 
 #create::-moz-placeholder {  /* Firefox 19+ */
