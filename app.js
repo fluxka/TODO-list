@@ -52,6 +52,8 @@ console.log(dataFromServer);
   // items = Items´ array (with id, description, completed, created_at, updated_at, list_name)
   var itemsData = dataFromServer.items;  // dataFromServer = responseText: "{"name": "fluxka_2", "items": [{"id":12889, "description":....}]
 
+console.log("itemsData in a loadRequest");
+console.log(itemsData);
 
   itemsData.forEach(function(itemData) {
     addItemToPage(itemData);
@@ -121,7 +123,7 @@ console.log(itemDataFromServer);
 })
 
 
-$('#list').on('click', '.delete-button', function(event) {
+$('#list').on('click', '.delete-button', function (event) {
 	// Get all the information we need
 	var item = $(event.target).parent();
 	var isItemDeleted = item.hasClass('deleted');
@@ -151,7 +153,83 @@ $('#list').on('click', '.delete-button', function(event) {
 
 })
 
-}
-);
+
+/* $("#button").click(function sortlist() {
+
+alert("Handler for .click() called.")
+});*/
+
+/* Click to order the list by date created instead by date updated */
+
+$("#button").click(function sortlist() {
+  
+  var itemsData;
+
+  loadRequest.done(function(dataFromServer) {
+
+  // items = Items´ array (with id, description, completed, created_at, updated_at, list_name)
+  itemsData = dataFromServer.items;  // dataFromServer = responseText: "{"name": "fluxka_2", "items": [{"id":12889, "description":....}]
+})
+
+  var switching = true;
+  var shouldSwitch;
+
+  /* Make a loop that will continue until no switching has been done */
+  while (switching) {
+  	// start by saying: not switching is done:
+  	switching = false;
+  	
+  	for (i=0; i<(itemsData.length - 1); i++) {
+  		//start by saying there should be no switchin
+  		shouldSwitch = false;
+  		console.log("Let´s compare:")
+  		console.log(Date.parse(itemsData[i]["created_at"]));
+      console.log(Date.parse(itemsData[i+1]["created_at"]));
+  		/* check if the next item should switch place with the current item */
+  		if (Date.parse(itemsData[i]["created_at"]) > Date.parse(itemsData[i+1]["created_at"])) {
+        console.log("Esta fecha de creación: " +  Date.parse(itemsData[i]["created_at"]) + " es posterior a: " + Date.parse(itemsData[i+1]["created_at"]));
+  			
+  			/* if next item date is lower than current item date, mark as switch and break the loop: */
+  			shouldSwitch = true;
+  			break; 
+  		} 
+  	}
+
+  	if (shouldSwitch) {
+  // Get all the information we need
+  var tmp = itemsData[i];
+  itemsData[i] = itemsData[i+1];
+  console.log("itemsData[i]");
+  console.log(itemsData[i]);
+  itemsData[i+1] = tmp;
+  console.log("itemsData[i+1]=tmp");
+  console.log(tmp);
+
+  var id_i = itemsData[i]["id"];
+  var id_ii = itemsData[i+1]["id"];
+  console.log("id1=" + id_i);
+
+$("li[data-id=" + id_i + "]").insertBefore( $("li[data-id=" + id_ii + "]") );
+
+
+  		/* if a switch has been marked, make the switch and mark the switch as done: */
+  		
+  		switching = true;
+  	}
+ } 
+
+    /* Add each element of the ordered list to the page 
+    itemsData.forEach(function(itemData) {
+    addItemToPage(itemData);
+  })*/
+
+}) /* End of "sortlist" code */ 
+
+}); /* End of "DOMContentLoaded" */
+
+
+
+
+
 
 
